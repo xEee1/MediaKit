@@ -48,14 +48,17 @@ python wsgi.py
 
 ### 3. 抖音视频下载（可选）
 
-抖音部分视频需要登录态才能下载，如需下载抖音视频：
+抖音部分视频需要登录态才能下载，如需下载抖音视频，你需要添加自己的 cookies 文件：
 
 1. 在浏览器中登录抖音官网 `https://www.douyin.com`
-2. 使用浏览器插件（如 EditThisCookie）导出 cookies
-3. 导出为 **Netscape 格式**，保存到项目根目录下的 `cookies.txt`
+2. 使用浏览器插件（如 **EditThisCookie**）导出 cookies
+3. 选择导出格式为 **Netscape 格式**，保存到项目根目录下，文件名为 `cookies.txt`
 4. 重新启动应用
 
-**注意**：`cookies.txt` 已添加到 `.gitignore`，不会提交到 GitHub
+> **重要说明**：
+> - `cookies.txt` 文件包含你的个人登录信息，请妥善保管
+> - 该文件已添加到 `.gitignore`，不会被提交到 GitHub，确保你的隐私安全
+> - 如果不添加 `cookies.txt`，抖音部分视频可能无法下载，但不影响其他平台（B站、YouTube等）的使用
 
 ## 项目结构
 
