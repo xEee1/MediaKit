@@ -7,10 +7,18 @@
 - 🎵 **视频转音频**（MP3 / WAV / M4A / FLAC / AAC / WMA / OGG）
 - 🎞️ **视频转 GIF**（高质量 palette 方案，可裁剪时间区间）
 - 🔁 **MOV 转 MP4**（流复制快速转换，自动回退 H.264 重新编码）
-- 📥 **多平台视频下载**（B站、YouTube、抖音、微博、小红书等）
+- 📥 **多平台视频下载**（B站、YouTube、抖音、微博、小红书等数百个平台）
 - 📤 **本地文件上传**（拖拽上传，最大 5GB）
 - 🎚️ **音质档位可调**（无损 / 320kbps / 190kbps / 128kbps / 64kbps）
 - 📱 **响应式界面**，适配手机和电脑
+- 📺 **浏览器内音频/视频预览**
+
+## 🛠️ 技术栈
+
+- **后端**: Python Flask
+- **前端**: HTML5 + Bootstrap 5 + Font Awesome
+- **视频下载**: yt-dlp
+- **音视频处理**: ffmpeg（通过 imageio-ffmpeg 自动安装）
 
 ## 🚀 快速开始
 
@@ -72,6 +80,14 @@ MediaKit/
 set FLASK_RUN_PORT=5001
 python wsgi.py
 ```
+
+### yt-dlp 版本过旧？
+```bash
+pip install --upgrade yt-dlp
+```
+
+### ffmpeg 命令未找到？
+ffmpeg 通过 imageio-ffmpeg 自动安装，无需手动配置。
 
 ## 📄 许可证
 
