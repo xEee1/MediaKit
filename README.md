@@ -1,4 +1,4 @@
-# 多媒体在线转换工具
+# MediaKit - 多媒体在线转换工具
 
 一个基于 Flask 的在线多媒体转换工具，支持：
 
@@ -34,7 +34,7 @@
 ### 1. 安装依赖
 
 ```bash
-cd video_converter
+cd MediaKit
 pip install -r requirements.txt
 ```
 
@@ -60,7 +60,7 @@ python wsgi.py
 ## 项目结构
 
 ```
-video_converter/
+MediaKit/
 ├── app/                        # 应用核心
 │   ├── __init__.py             # 应用工厂
 │   ├── routes.py               # 路由和 API
