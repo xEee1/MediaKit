@@ -36,5 +36,8 @@ logs/
 # 系统文件
 Thumbs.db
 
-# 抖音 cookies（不要提交到 GitHub）
+# 登录态 cookies（支持抖音、B站、YouTube等多平台，不要提交到 GitHub）
 cookies.txt
+
+# ffmpeg 可执行文件（自动复制，不需要提交）
+ffmpeg/

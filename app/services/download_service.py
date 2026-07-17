@@ -93,14 +93,28 @@ def download_video(url, output_dir, custom_filename=None, task_id=None):
                 raise Exception("视频下载失败: 未找到下载文件")
     except yt_dlp.DownloadError as e:
         error_msg = str(e)
-        if "Fresh cookies" in error_msg or "fresh cookies" in error_msg:
+        platform = "未知平台"
+        if 'bilibili' in url.lower() or 'bilibili.com' in url.lower():
+            platform = "B站"
+        elif 'douyin' in url.lower() or 'douyin.com' in url.lower():
+            platform = "抖音"
+        elif 'youtube' in url.lower() or 'youtube.com' in url.lower():
+            platform = "YouTube"
+        elif 'tiktok' in url.lower() or 'tiktok.com' in url.lower():
+            platform = "TikTok"
+
+        if "Fresh cookies" in error_msg or "fresh cookies" in error_msg or \
+           "HTTP Error 412" in error_msg or "Precondition Failed" in error_msg or \
+           "HTTP Error 403" in error_msg or "Forbidden" in error_msg:
             error_msg = (
-                "需要抖音登录态才能下载此视频。\n"
+                f"{platform}反爬机制触发，需要登录态才能下载此视频。\n"
                 "解决方法：\n"
-                "1. 在浏览器中登录抖音官网 (https://www.douyin.com)\n"
-                "2. 使用浏览器插件导出cookies为Netscape格式\n"
-                "3. 将文件保存为项目根目录下的 'cookies.txt'\n"
-                "4. 刷新页面重新尝试"
+                f"1. 在浏览器中登录{platform}官网\n"
+                "2. 使用浏览器插件（如EditThisCookie）导出cookies为Netscape格式\n"
+                "3. 将导出的cookies追加到项目根目录下的 'cookies.txt' 文件中\n"
+                "4. 刷新页面重新尝试\n\n"
+                "💡 提示：'cookies.txt' 文件可以同时包含多个平台的登录态（抖音、B站、YouTube等），\n"
+                "只需将各平台导出的cookies按Netscape格式依次追加到同一文件即可。"
             )
         elif "Unsupported URL" in error_msg or "unsupported URL" in error_msg:
             error_msg = f"无法解析该视频链接，请确认链接是否有效。原始错误: {error_msg[:100]}"
