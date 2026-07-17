@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多媒体在线转换工具</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- 顶部标题栏 -->
+    <header class="app-header">
+        <div class="container">
+            <div class="header-inner">
+                <a class="brand" href="/">
+                    <span class="brand-mark"><i class="fa fa-bolt"></i></span>
+                    <span class="brand-text">MediaKit</span>
+                </a>
+                <nav class="header-nav">
+                    <span class="nav-tag"><i class="fa fa-shield"></i> 本地处理</span>
+                    <span class="nav-tag"><i class="fa fa-mobile"></i> 全设备</span>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体 -->
+    <main class="app-main">
+        <div class="container">
+            <!-- 页面标题 -->
+            <div class="page-head">
+                <h1 class="page-title">多媒体在线转换</h1>
+                <p class="page-sub">视频转音频 · 视频转 GIF · MOV 转 MP4 · 持续更新中</p>
+            </div>
+
+            <!-- 工具卡片 -->
+            <section class="tool-card">
+                <!-- 功能 Tab 栏 -->
+                <div class="tab-bar" role="tablist">
+                    <button type="button" class="tab-item active" data-type="audio" role="tab">
+                        <i class="fa fa-music"></i>
+                        <span>视频转音频</span>
+                    </button>
+                    <button type="button" class="tab-item" data-type="gif" role="tab">
+                        <i class="fa fa-film"></i>
+                        <span>视频转 GIF</span>
+                    </button>
+                    <button type="button" class="tab-item" data-type="mov2mp4" role="tab">
+                        <i class="fa fa-exchange"></i>
+                        <span>MOV 转 MP4</span>
+                    </button>
+                    <!-- 预留扩展点：新功能在此添加新的 tab-item -->
+                </div>
+
+                <form id="convertForm" novalidate>
+                    <input type="hidden" id="convertType" value="audio">
+                    <input type="hidden" id="sourceType" value="url">
+
+                    <!-- 来源切换 -->
+                    <div class="source-switch">
+                        <button type="button" class="switch-btn active" data-source="url">
+                            <i class="fa fa-link"></i> 视频链接
+                        </button>
+                        <button type="button" class="switch-btn" data-source="upload">
+                            <i class="fa fa-cloud-upload"></i> 上传文件
+                        </button>
+                    </div>
+
+                    <!-- URL 模式 -->
+                    <div class="source-panel" id="urlPanel">
+                        <div class="form-group">
+                            <label for="url">视频链接</label>
+                            <input type="text" class="form-control" id="url"
+                                   placeholder="https://www.bilibili.com/video/... 或其他平台链接" autocomplete="off">
+                            <small class="form-hint">支持 B 站、YouTube、抖音、微博等主流平台</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="videoFileName">自定义文件名（可选）</label>
+                            <input type="text" class="form-control" id="videoFileName"
+                                   placeholder="留空使用默认名称，支持中文" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- 上传模式 -->
+                    <div class="source-panel" id="uploadPanel" hidden>
+                        <div class="dropzone" id="dropzone">
+                            <input type="file" id="fileInput" accept="video/*" hidden>
+                            <i class="fa fa-cloud-upload dropzone-icon"></i>
+                            <p class="dropzone-title">点击或拖拽视频到此处</p>
+                            <p class="dropzone-hint">支持 MP4 / MOV / AVI / MKV / WEBM，最大 200MB</p>
+                            <button type="button" class="btn btn-ghost btn-sm" id="browseBtn">
+                                <i class="fa fa-folder-open"></i> 选择文件
+                            </button>
+                        </div>
+                        <div class="file-info" id="fileInfo" hidden>
+                            <i class="fa fa-file-video-o"></i>
+                            <span class="file-name" id="fileName"></span>
+                            <span class="file-size" id="fileSize"></span>
+                            <button type="button" class="btn-icon" id="removeFileBtn" title="移除">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 音频模式参数 -->
+                    <div class="type-panel" data-type="audio">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="format">输出格式</label>
+                                    <select class="form-control" id="format">
+                                        <option value="mp3" selected>MP3 · 通用</option>
+                                        <option value="aac">AAC · 车载/手机</option>
+                                        <option value="m4a">M4A · Apple 生态</option>
+                                        <option value="wma">WMA · Windows/车载</option>
+                                        <option value="wav">WAV · 无损</option>
+                                        <option value="flac">FLAC · 压缩无损</option>
+                                        <option value="ogg">OGG · 开源格式</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="quality">音质</label>
+                                    <select class="form-control" id="quality">
+                                        <option value="0">无损音质 · 最高品质</option>
+                                        <option value="2">高音质 · 320kbps</option>
+                                        <option value="4" selected>推荐 · 190kbps</option>
+                                        <option value="6">标准 · 128kbps</option>
+                                        <option value="9">经济 · 64kbps</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GIF 模式参数 -->
+                    <div class="type-panel" data-type="gif" hidden>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="gifFps">帧率 (FPS)</label>
+                                    <select class="form-control" id="gifFps">
+                                        <option value="8">8 · 流畅</option>
+                                        <option value="10" selected>10 · 推荐</option>
+                                        <option value="15">15 · 高质量</option>
+                                        <option value="20">20 · 高清</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="gifWidth">宽度 (px)</label>
+                                    <select class="form-control" id="gifWidth">
+                                        <option value="320">320 · 小</option>
+                                        <option value="480" selected>480 · 中</option>
+                                        <option value="720">720 · 大</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="gifStart">起始时间（可选）</label>
+                                    <input type="text" class="form-control" id="gifStart" placeholder="例如 00:00:05 或 5">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="gifDuration">持续时长（可选）</label>
+                                    <input type="text" class="form-control" id="gifDuration" placeholder="例如 3 或 00:00:03">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MOV2MP4 模式参数 -->
+                    <div class="type-panel" data-type="mov2mp4" hidden>
+                        <div class="info-banner">
+                            <i class="fa fa-info-circle"></i>
+                            <div>
+                                <strong>智能转封装</strong>
+                                <p>优先采用流复制方式（秒级完成、无损），失败时自动回退到 H.264 重新编码。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-submit" id="convertBtn">
+                        <i class="fa fa-arrow-circle-right" id="btnIcon"></i>
+                        <span class="btn-text">开始转换</span>
+                    </button>
+                </form>
+
+                <!-- 进度区 -->
+                <div class="progress-card" id="progressCard" hidden>
+                    <div class="progress-head">
+                        <span class="progress-label">处理进度</span>
+                        <span class="progress-percent" id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="progressText"></div>
+                </div>
+
+                <!-- 错误提示 -->
+                <div class="alert error" id="errorBox" hidden>
+                    <i class="fa fa-exclamation-circle"></i>
+                    <span id="errorText"></span>
+                    <button type="button" class="btn-icon" id="errorClose" title="关闭">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- 结果区 -->
+                <div class="result-card" id="resultCard" hidden>
+                    <div class="result-head">
+                        <i class="fa fa-check-circle"></i>
+                        <span>转换完成</span>
+                    </div>
+                    <div class="result-info" id="resultInfo"></div>
+
+                    <!-- 预览播放区 -->
+                    <div class="preview-area" id="previewArea" hidden>
+                        <div class="preview-tabs" id="previewTabs" role="tablist">
+                            <!-- 由 JS 动态生成 -->
+                        </div>
+                        <div class="preview-content" id="previewContent">
+                            <!-- 由 JS 动态生成 video/audio 元素 -->
+                        </div>
+                    </div>
+
+                    <div class="result-actions" id="resultActions"></div>
+                </div>
+            </section>
+
+            <!-- 功能说明 -->
+            <section class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fa fa-music"></i></div>
+                    <div class="feature-title">多格式音频</div>
+                    <div class="feature-desc">MP3 / WAV / M4A / FLAC 自由选择</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fa fa-bolt"></i></div>
+                    <div class="feature-title">高速处理</div>
+                    <div class="feature-desc">本地 FFmpeg 引擎，秒级响应</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fa fa-shield"></i></div>
+                    <div class="feature-title">隐私安全</div>
+                    <div class="feature-desc">文件本地处理，不上传第三方</div>
+                </div>
+            </section>
+
+            <footer class="app-footer">
+                <p>本工具为本地处理 · 文件不会上传到第三方服务器</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

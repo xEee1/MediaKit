@@ -1,0 +1,40 @@
+# 环境变量
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv/
+
+# 临时文件
+tmp/*
+!tmp/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# 日志
+*.log
+logs/
+
+# 系统文件
+Thumbs.db
+
+# 抖音 cookies（不要提交到 GitHub）
+cookies.txt
